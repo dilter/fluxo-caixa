@@ -1,6 +1,10 @@
-﻿namespace Stone.Lancamento.Domain.Lancamentos.Repositories
+﻿using Stone.Sdk.Domain;
+
+namespace Stone.Lancamento.Domain.Lancamentos.Repositories
 {
-    public interface ILancamentos
+    using Entities;
+    
+    public interface ILancamentos : IRepository<Lancamento>
     {
         
     }
