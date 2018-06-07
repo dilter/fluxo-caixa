@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System;
+using System.Globalization;
+using FluentValidation;
 using Stone.Lancamento.Application.Commands.Inputs;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
 using Stone.Sdk.Extensions;
@@ -48,6 +50,21 @@ namespace Stone.Lancamento.WebApi.Validation
                 .WithMessage("Informe o CPF no formato 000.000.000-00.")                
                 .When(x=> !string.IsNullOrEmpty(x.Cnpj))                
                 .WithMessage("O CPF deve ser informado sem preenchimento do CNPJ.");
+
+            RuleFor(r => r.DataDeLancamento)
+                .Must(m =>
+                {
+                    try
+                    {
+                        var data = DateTime.Parse(m, new CultureInfo("pt-BR"));
+                        return data.Date >= DateTime.Now.Date;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                })
+                .WithMessage($"A data de lançamento deve maior igual a {DateTime.Now.Date:dd/MM/yyyy} e deve estar no formato dd/MM/yyyy");
             
             RuleFor(r => r.ValorLancamento)
                 .Must(v => v.TryParseFromRealCurrency(out var valor))
