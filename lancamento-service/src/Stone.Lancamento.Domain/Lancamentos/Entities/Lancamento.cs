@@ -11,10 +11,11 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
         public decimal Encargos { get; set; }
         public DateTime Em { get; set; }
         public TipoLancamento Tipo { get; set; }
+        public SituacaoLancamento Situacao { get; set; }
 
         public Lancamento()
         {
-            this.ContaDestino = new ContaBancaria();
+            this.Situacao = SituacaoLancamento.Recebido;
         }
     }
 }
