@@ -13,32 +13,7 @@ namespace Stone.Lancamento.Application.Commands.Inputs
         public string Cpf { get; set; }
         public string Cnpj { get; set; }
         [DefaultValue("R$ 0,00")]
-        public string ValorLancamento { get; set; }
-        [DefaultValue("R$ 0,00")]
-        public string Encargos { get; set; }        
-    }
-
-
-    public enum Banco
-    {
-        BancoDoBrasil,
-        CEF,
-        Bradesco,
-        Santander,
-        BancoDoNordeste
-    }
-    
-    public enum TipoConta
-    {
-        [Description("Conta Corrente")]
-        ContaCorrente,
-        [Description("Poupança")]
-        Poupanca
-    }
-
-    public enum TipoLancamento
-    {
-        Pagamento,
-        Recebimento
+        public string ValorLancamento { get; set; }         
+        public string DataDeLancamento { get; set; }
     }
 }
