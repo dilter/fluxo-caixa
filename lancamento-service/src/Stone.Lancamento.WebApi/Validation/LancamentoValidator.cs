@@ -1,21 +1,14 @@
-﻿using System.Globalization;
-using FluentValidation;
+﻿using FluentValidation;
 using Stone.Lancamento.Application.Commands.Inputs;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Sdk.Extensions;
 
 namespace Stone.Lancamento.WebApi.Validation
 {
     public class LancamentoValidator : AbstractValidator<LancamentoInput>
     {
         public LancamentoValidator()
-        {
-            var _formatInfo = new NumberFormatInfo
-            {
-                NegativeSign = "-",
-                CurrencyDecimalSeparator = ",",
-                CurrencyGroupSeparator = ".",
-                CurrencySymbol = "R$"
-            };
+        {            
             RuleFor(r => r.BancoDestino).IsInEnum();
             RuleFor(r => r.TipoDeConta).IsInEnum();
             RuleFor(r => r.Tipo).IsInEnum();
@@ -57,7 +50,7 @@ namespace Stone.Lancamento.WebApi.Validation
                 .WithMessage("O CPF deve ser informado sem preenchimento do CNPJ.");
             
             RuleFor(r => r.ValorLancamento)
-                .Must(v => decimal.TryParse(v, NumberStyles.Currency, _formatInfo, out var valor))
+                .Must(v => v.TryParseFromRealCurrency(out var valor))
                 .WithMessage("O formato deve ser: R$0,00");
         }
     }

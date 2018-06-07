@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using Stone.Lancamento.Application;
 using Stone.Lancamento.Application.Commands;
 using Stone.Lancamento.Persistence.Configuration;
+using Stone.Lancamento.Persistence.Extensions;
 using Stone.Lancamento.WebApi.Validation;
 using Stone.Sdk.Extensions;
+using Stone.Sdk.Web;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Stone.Lancamento.WebApi
@@ -26,7 +29,10 @@ namespace Stone.Lancamento.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services                                              
-                .AddMvc()
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(new UnitOfWorkFilter());
+                })
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LancamentoValidator>())                
                 .AddJsonOptions(options =>
                 {
@@ -37,13 +43,17 @@ namespace Stone.Lancamento.WebApi
                 });
 
             services
-                .AddDbContext<LancamentosDbContext>();
+                .AddPersistenceEfContext<LancamentosDbContext>()
+                .AddRepositories();
             
             services
                 .AddMediatR(typeof(CriarLancamentoCommand).Assembly);
 
             services
                 .AddMessageBroker(Configuration);
+
+            services
+                .AddApplicationMappings();
             
             services
                 .AddSwaggerGen(c =>

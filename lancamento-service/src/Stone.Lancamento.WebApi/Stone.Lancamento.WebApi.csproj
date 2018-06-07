@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />
+    <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />
     <ProjectReference Include="..\Stone.Lancamento.Application\Stone.Lancamento.Application.csproj" />
     <ProjectReference Include="..\Stone.Lancamento.Persistence\Stone.Lancamento.Persistence.csproj">
       <Project>{1620C552-96E0-4FA5-8219-4B836F7A437F}</Project>
