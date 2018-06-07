@@ -9,6 +9,6 @@ namespace Stone.Lancamento.Application.Commands
         public CriarLancamentoCommand(LancamentoInput input)
         {
             this.Input = input;
-        }
+        }      
     }
 }
