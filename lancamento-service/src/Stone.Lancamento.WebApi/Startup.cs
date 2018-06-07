@@ -1,10 +1,14 @@
 ﻿using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using Stone.Lancamento.Application.Commands;
+using Stone.Lancamento.Persistence.Configuration;
 using Stone.Lancamento.WebApi.Validation;
+using Stone.Sdk.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Stone.Lancamento.WebApi
@@ -23,19 +27,28 @@ namespace Stone.Lancamento.WebApi
         {
             services                                              
                 .AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LancamentoValidator>())
-                
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LancamentoValidator>())                
                 .AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver
                     {
                         NamingStrategy = new SnakeCaseNamingStrategy()
                     };
-                });            
+                });
+
+            services
+                .AddDbContext<LancamentosDbContext>();
+            
+            services
+                .AddMediatR(typeof(CriarLancamentoCommand).Assembly);
+
+            services
+                .AddMessageBroker(Configuration);
+            
             services
                 .AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                    c.SwaggerDoc("v1", new Info { Title = "Lançamento Service", Version = "v1" });
                     c.DescribeAllEnumsAsStrings();
                 });
         }
@@ -48,6 +61,8 @@ namespace Stone.Lancamento.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCommandHandlerFor<CriarLancamentoCommand>();
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

@@ -14,11 +14,17 @@
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00777" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />
     <ProjectReference Include="..\Stone.Lancamento.Application\Stone.Lancamento.Application.csproj" />
+    <ProjectReference Include="..\Stone.Lancamento.Persistence\Stone.Lancamento.Persistence.csproj">
+      <Project>{1620C552-96E0-4FA5-8219-4B836F7A437F}</Project>
+      <Name>Stone.Lancamento.Persistence</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -24,7 +24,7 @@ namespace Stone.Lancamento.WebApi.Validation
                 {
                     try
                     {
-                        new Cnpj(m);
+                        Cnpj cnpj = m;
                         return true;
                     }
                     catch
@@ -38,12 +38,12 @@ namespace Stone.Lancamento.WebApi.Validation
                 .When(x => !string.IsNullOrEmpty(x.Cpf))
                 .WithMessage("O CNPJ deve ser informado sem preenchimento do CPF.");
             
-            RuleFor(r => r.Cpf)                
+            RuleFor(r => r.Cpf)                      
                 .Must(m =>
                 {
                     try
                     {
-                        new Cpf(m);
+                        Cpf cpf = m;
                         return true;
                     }
                     catch
@@ -52,8 +52,7 @@ namespace Stone.Lancamento.WebApi.Validation
                     }                    
                 })                
                 .When(x => string.IsNullOrEmpty(x.Cnpj))    
-                .WithMessage("Informe o CPF no formato 000.000.000-00.")
-                .Empty()
+                .WithMessage("Informe o CPF no formato 000.000.000-00.")                
                 .When(x=> !string.IsNullOrEmpty(x.Cnpj))                
                 .WithMessage("O CPF deve ser informado sem preenchimento do CNPJ.");
             
