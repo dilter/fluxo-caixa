@@ -72,6 +72,8 @@ namespace Stone.Lancamento.WebApi
             }
 
             app.UseCommandHandlerFor<CriarLancamentoCommand>();
+            app.UseCommandHandlerFor<ProcessarPagamentoCommand>();
+            app.UseCommandHandlerFor<ProcessarRecebimentoCommand>();
             
             app.UseSwagger();
             app.UseSwaggerUI(c =>
