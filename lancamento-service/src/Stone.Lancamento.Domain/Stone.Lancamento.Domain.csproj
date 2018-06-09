@@ -4,7 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Lancamentos\Events" />
-    <Folder Include="Lancamentos\Services" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />

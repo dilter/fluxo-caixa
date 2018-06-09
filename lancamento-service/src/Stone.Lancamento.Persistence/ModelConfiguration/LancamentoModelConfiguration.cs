@@ -10,10 +10,7 @@ namespace Stone.Lancamento.Persistence.ModelConfiguration
         public void Configure(EntityTypeBuilder<Lancamento> builder)
         {
             builder
-                .HasKey(x => x.Id);
-
-            builder
-                .OwnsOne(x => x.ContaDestino);
+                .HasKey(x => x.Id);            
         }
-    }   
+    }
 }

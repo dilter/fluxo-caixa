@@ -3,6 +3,7 @@ using System.Globalization;
 using FluentValidation;
 using Stone.Lancamento.Application.Commands.Inputs;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Sdk.Domain;
 using Stone.Sdk.Extensions;
 
 namespace Stone.Lancamento.WebApi.Validation

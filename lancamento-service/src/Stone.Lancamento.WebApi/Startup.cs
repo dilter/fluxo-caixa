@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Stone.Lancamento.Application;
 using Stone.Lancamento.Application.Commands;
+using Stone.Lancamento.Domain.Lancamentos.Services;
 using Stone.Lancamento.Persistence.Configuration;
 using Stone.Lancamento.Persistence.Extensions;
 using Stone.Lancamento.WebApi.Validation;
@@ -44,6 +45,8 @@ namespace Stone.Lancamento.WebApi
 
             services
                 .AddPersistenceEfContext<LancamentosDbContext>()
+                .AddScoped<ProcessarPagamento>()
+                .AddScoped<ProcessarRecebimento>()
                 .AddRepositories();
             
             services
@@ -81,6 +84,9 @@ namespace Stone.Lancamento.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseMvc();
+            
+            // Sample data!
+            app.SeedData();
         }
     }
 }

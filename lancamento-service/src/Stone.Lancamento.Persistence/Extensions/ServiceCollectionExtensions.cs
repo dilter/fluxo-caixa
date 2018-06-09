@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
 using Stone.Lancamento.Persistence.Repositories;
 using Stone.Sdk.Persistence;
@@ -20,6 +21,8 @@ namespace Stone.Lancamento.Persistence.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {            
             services.AddScoped<ILancamentos, LancamentosRepository>();
+            services.AddScoped<IEmpresas, EmpresasRepository>();
+            services.AddScoped<IContas, ContasRepository>();
             
             return services;
         }

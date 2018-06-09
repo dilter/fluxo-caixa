@@ -1,5 +1,7 @@
 ﻿using System;
+using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Sdk.Domain;
 using Stone.Sdk.Persistence;
 
 namespace Stone.Lancamento.Domain.Lancamentos.Entities
@@ -7,7 +9,9 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
     public class Lancamento : Entity
     {
         public decimal Valor { get; set; }
-        public ContaBancaria ContaDestino { get; set; }
+        public string ContaDestino { get; set; }
+        public Cpf Cpf { get; set; }
+        public Cnpj Cnpj { get; set; }
         public decimal Encargos { get; set; }
         public DateTime Em { get; set; }
         public TipoLancamento Tipo { get; set; }
@@ -16,6 +20,7 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
         public Lancamento()
         {
             this.Situacao = SituacaoLancamento.Recebido;
+            this.CreationTime = DateTime.Now;
         }
     }
 }

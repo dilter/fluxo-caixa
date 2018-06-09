@@ -1,9 +1,9 @@
-﻿namespace Stone.Lancamento.Domain.Lancamentos.ValueObjects
+﻿namespace Stone.Sdk.Domain
 {
     public enum Banco
     {
         BancoDoBrasil,
-        CEF,
+        CaixaEconomicaFederal,
         Bradesco,
         Santander,
         BancoDoNordeste

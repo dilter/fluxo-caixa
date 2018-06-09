@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Stone.Lancamento.Domain.Lancamentos.ValueObjects
+namespace Stone.Sdk.Domain
 {
     public struct Cpf
     {

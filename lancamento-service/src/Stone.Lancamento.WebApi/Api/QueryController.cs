@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
 
 namespace Stone.Lancamento.WebApi.Api
@@ -10,17 +11,18 @@ namespace Stone.Lancamento.WebApi.Api
     public partial class QueryController : Controller
     {
         private readonly ILogger<QueryController> _logger;
-        private readonly ILancamentos _lancamentos;
-        public QueryController(ILogger<QueryController> logger, ILancamentos lancamentos)
+        private readonly IEmpresas _empresas;
+
+        public QueryController(ILogger<QueryController> logger, IEmpresas empresas)
         {
             _logger = logger;
-            _lancamentos = lancamentos;
+            _empresas = empresas;
         }
 
         [HttpGet("query")]
         public async Task<IActionResult> Get()
-        {
-            var lancamentos = _lancamentos.GetAll().ToList();
+        {            
+            var empresas = _empresas.GetAll().ToList();            
             return Json(new {});
         }
     }

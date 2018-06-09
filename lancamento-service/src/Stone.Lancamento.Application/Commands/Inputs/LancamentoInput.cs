@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Sdk.Domain;
 
 namespace Stone.Lancamento.Application.Commands.Inputs
 {
