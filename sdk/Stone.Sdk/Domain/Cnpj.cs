@@ -3,18 +3,21 @@ using System.Text.RegularExpressions;
 
 namespace Stone.Sdk.Domain
 {
-    public struct Cnpj
+    public class Cnpj
     {
+        public Cnpj()
+        {
+            
+        }        
         //  Constructors
-        public Cnpj(string value)
-            : this()
+        public Cnpj(string value)            
         {
             this.Value = value;
             this.IsValid();
         }
         
         //  Fields
-        public readonly string Value;
+        public string Value { get; set; }
 
         //  Operators
         public static implicit operator Cnpj(string value)
