@@ -18,15 +18,15 @@ namespace Stone.Lancamento.Application.Commands.Handlers
 
         public async Task Handle(CommandContext<ProcessarRecebimentoCommand> context)
         {
+            var lancamento = context.Command.Input;
             try
-            {
-                var lancamento = context.Command.Input;
+            {                
                 await _processarRecebimento.Apply(lancamento);
-                await _eventBus.PublishAsync(new LancamentoProcessadoEvent());
+                await _eventBus.PublishAsync(new LancamentoProcessadoEvent(lancamento.Id));
             }
             catch (Exception e)
             {
-                await _eventBus.PublishAsync(new LancamentoProcessadoEvent(e));
+                await _eventBus.PublishAsync(new LancamentoProcessadoEvent(lancamento.Id, e));
             }
         }
     }

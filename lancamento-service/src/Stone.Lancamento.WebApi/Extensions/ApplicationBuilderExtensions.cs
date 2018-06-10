@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Contas.Repositories;
-using Stone.Lancamento.Domain.Lancamentos.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
 using Stone.Sdk.Domain;
 using Stone.Sdk.Persistence;
@@ -11,9 +9,8 @@ namespace Stone.Lancamento.WebApi
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void SeedData(this IApplicationBuilder builder)
-        {
-            var lancamentosRepository = ((ILancamentos)builder.ApplicationServices.GetService(typeof(ILancamentos)));
+        public static void SeedInMemoryData(this IApplicationBuilder builder)
+        {            
             var empresasRepository = ((IEmpresas)builder.ApplicationServices.GetService(typeof(IEmpresas)));
             var contasRepository = ((IContas)builder.ApplicationServices.GetService(typeof(IContas)));
             
@@ -22,16 +19,12 @@ namespace Stone.Lancamento.WebApi
             var empresa = empresasRepository.Add(new Empresa()
             {
                 Cnpj = "15.381.215/0001-77",                
+                RazaoSocial = "DILTER PORTO LADISLAU - ME",
             });
             
-            empresa.AdicionarContaBancaria(new ContaBancaria()
-            {
-                Banco = Banco.Santander,
-                Limite = 20000,
-                Numero = "13000715-7",
-                Tipo = TipoConta.ContaCorrente,                                    
-            });
-
+            var contaBancaria = new ContaBancaria(empresa, Banco.Santander, "13000715-7", TipoConta.ContaCorrente, 20000);
+            contasRepository.Add(contaBancaria);
+            
             uow.Commit();
             
         }        

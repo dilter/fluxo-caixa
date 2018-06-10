@@ -10,32 +10,14 @@ namespace Stone.Lancamento.Application.Commands.Handlers
 {
     using Domain.Lancamentos.Entities;
     
-    public class CriarLancamentoCommandHandler : IAsyncCommandHandler<CriarLancamentoCommand>,
-        IAsyncEventHandler<LancamentoProcessadoEvent>
+    public class CriarLancamentoCommandHandler : IAsyncCommandHandler<CriarLancamentoCommand>
     {
-        private readonly ICommandBus _commandBus;
         private readonly ILancamentos _lancamentos;
-        public CriarLancamentoCommandHandler(ILancamentos lancamentos, ICommandBus commandBus)
+        public CriarLancamentoCommandHandler(ILancamentos lancamentos)
         {
             _lancamentos = lancamentos;
-            _commandBus = commandBus;
         }
 
-        private async Task EnviarParaProcessamento(Lancamento input)
-        {
-            switch (input.Tipo)
-            {
-                case TipoLancamento.Pagamento:
-                    await _commandBus.SendAsync(new ProcessarPagamentoCommand(input));
-                    break;
-                case TipoLancamento.Recebimento:
-                    await _commandBus.SendAsync(new ProcessarRecebimentoCommand(input));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        
         public async Task Handle(CommandContext<CriarLancamentoCommand> context)
         {
             try
@@ -44,18 +26,11 @@ namespace Stone.Lancamento.Application.Commands.Handlers
                 var lancamento = input.MapTo<Lancamento>();
                 
                 _lancamentos.Add(lancamento);
-                
-                await this.EnviarParaProcessamento(lancamento);
             }
             catch (Exception e)
             {
                 throw e;
             }
-        }
-
-        public async Task Handle(EventContext<LancamentoProcessadoEvent> context)
-        {
-            
         }
     }
 }

@@ -10,8 +10,7 @@ namespace Stone.Lancamento.Application.Commands.Inputs
         public string Descricao { get; set; }
         public string ContaDestino { get; set; }
         public Banco BancoDestino { get; set; }
-        public TipoConta TipoDeConta { get; set; }        
-        public string Cpf { get; set; }
+        public TipoConta TipoDeConta { get; set; }                
         public string Cnpj { get; set; }
         [DefaultValue("R$ 0,00")]
         public string ValorLancamento { get; set; }         

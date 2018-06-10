@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,19 +12,39 @@ namespace Stone.Lancamento.WebApi.Api
     public partial class QueryController : Controller
     {
         private readonly ILogger<QueryController> _logger;
-        private readonly IEmpresas _empresas;
-
-        public QueryController(ILogger<QueryController> logger, IEmpresas empresas)
+        private readonly IContas _contas;
+        private readonly ILancamentos _lancamentos;
+        public QueryController(ILogger<QueryController> logger, IContas contas, ILancamentos lancamentos)
         {
             _logger = logger;
-            _empresas = empresas;
+            _contas = contas;
+            _lancamentos = lancamentos;
         }
 
         [HttpGet("query")]
         public async Task<IActionResult> Get()
-        {            
-            var empresas = _empresas.GetAll().ToList();            
-            return Json(new {});
+        {
+            try
+            {
+                var contas = _contas.GetAll().ToList();
+                var lancamentos = _lancamentos.GetAll().ToList();
+                var pagamentos = _lancamentos.GetAllPagamentos().ToList();
+                var recebimentos = _lancamentos.GetAllRecebimentos().ToList();
+                return Json(new
+                {
+                    contas,
+                    lancamentos,
+                    pagamentos,
+                    recebimentos
+                });
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, new
+                {
+                    error = e,
+                });
+            }                        
         }
     }
 }

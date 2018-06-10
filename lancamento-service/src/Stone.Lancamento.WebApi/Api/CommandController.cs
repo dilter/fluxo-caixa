@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Stone.Lancamento.Application.Commands.Inputs;
 using Stone.Sdk.Messaging;
 
 namespace Stone.Lancamento.WebApi.Api

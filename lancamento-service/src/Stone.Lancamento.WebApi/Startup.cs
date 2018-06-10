@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Stone.Lancamento.Application;
 using Stone.Lancamento.Application.Commands;
+using Stone.Lancamento.Application.Events;
 using Stone.Lancamento.Domain.Lancamentos.Services;
 using Stone.Lancamento.Persistence.Configuration;
 using Stone.Lancamento.Persistence.Extensions;
@@ -44,7 +45,7 @@ namespace Stone.Lancamento.WebApi
                 });
 
             services
-                .AddPersistenceEfContext<LancamentosDbContext>()
+                .AddPersistenceEfContext<LancamentosDbContext>(Configuration)
                 .AddScoped<ProcessarPagamento>()
                 .AddScoped<ProcessarRecebimento>()
                 .AddRepositories();
@@ -74,9 +75,9 @@ namespace Stone.Lancamento.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSubcriberFor<LancamentoProcessadoEvent>();
+            
             app.UseCommandHandlerFor<CriarLancamentoCommand>();
-            app.UseCommandHandlerFor<ProcessarPagamentoCommand>();
-            app.UseCommandHandlerFor<ProcessarRecebimentoCommand>();
             
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -86,7 +87,7 @@ namespace Stone.Lancamento.WebApi
             app.UseMvc();
             
             // Sample data!
-            app.SeedData();
+            //app.SeedInMemoryData();
         }
     }
 }

@@ -7,23 +7,24 @@ namespace Stone.Lancamento.WebApi.Api
 {
     public partial class CommandController
     {
-        [HttpPost("lancamentos")]
-        public async Task<IActionResult> PostLancamento([FromBody] LancamentoInput input)
+        [HttpPost("lancamentos/consolidacao")]
+        public async Task<IActionResult> PostConsolidacao([FromBody] ConsolidacaoInput input)
         {
-            var criarLancamentoCommand = new CriarLancamentoCommand(input);
+            var consolidarLancamentosCommand = new ConsolidarLancamentosCommand(input);
             if (!ModelState.IsValid)
-            {                
+            {
                 return StatusCode(400, new
                 {
-                    command = criarLancamentoCommand,
+                    command = consolidarLancamentosCommand,
                     status = "error",
                     erros = ModelState.AllErrors(),
                 });
-            }            
-            await _commandBus.SendAsync(criarLancamentoCommand);
+            }
+
+            await _commandBus.SendAsync(consolidarLancamentosCommand);
             return Json(new
             {
-                command = criarLancamentoCommand,
+                command = consolidarLancamentosCommand,
                 status = "sent",
             });
         }
