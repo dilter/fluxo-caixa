@@ -9,8 +9,8 @@ namespace Stone.Lancamento.Persistence.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Lancamento> builder)
         {
-            builder
-                .HasKey(x => x.Id);            
+            builder.HasKey(x => x.Id);      
+            builder.OwnsOne(x => x.Cnpj, c => { c.Property(y => y.Value).HasColumnName("Cnpj_Value"); });
         }
     }
 }

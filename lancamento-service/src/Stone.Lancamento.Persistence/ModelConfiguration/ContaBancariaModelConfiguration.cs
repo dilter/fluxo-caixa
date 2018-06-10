@@ -8,7 +8,7 @@ namespace Stone.Lancamento.Persistence.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<ContaBancaria> builder)
         {
-            builder.HasOne(x => x.Empresa).WithMany(x => x.ContasBancarias);
+            builder.HasOne(x => x.Empresa);
         }
     }
 }

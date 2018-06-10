@@ -14,23 +14,15 @@ namespace Stone.Lancamento.Persistence.Repositories
         {
         }
 
-        public override IQueryable<Empresa> GetAll()
-        {
-            return base.GetAll()
-                .Include(x => x.ContasBancarias);
-        }
-
         public Empresa GetByCnpj(Cnpj cnpj)
         {
-            return this.GetAll()
-                .Include(x => x.ContasBancarias)                
+            return this.GetAll()                                
                 .FirstOrDefault(x => x.Cnpj.Equals(cnpj));
         }
         
         public override Empresa FindById(Guid id)
         {
-            return this.GetAll()                
-                .Include(x => x.ContasBancarias)
+            return this.GetAll()                                
                 .FirstOrDefault(x => x.Id == id);
         }
     }

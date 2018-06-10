@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
@@ -9,11 +10,12 @@ namespace Stone.Lancamento.Persistence.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPersistenceEfContext<TDbContext>(this IServiceCollection services)
+        public static IServiceCollection AddPersistenceEfContext<TDbContext>(this IServiceCollection services, IConfiguration configuration)
             where TDbContext : DbContext
         {            
+            var configurationConnectionStringSection = configuration.GetSection("ConnectionStrings");
             services.AddScoped<DbContext, TDbContext>();
-            services.AddDbContext<TDbContext>(opt => opt.UseInMemoryDatabase(nameof(TDbContext)));
+            services.AddDbContext<TDbContext>(opt => opt.UseSqlServer(configurationConnectionStringSection["DefaultConnection"]));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }

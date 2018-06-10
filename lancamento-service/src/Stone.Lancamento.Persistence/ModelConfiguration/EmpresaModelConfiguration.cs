@@ -8,7 +8,8 @@ namespace Stone.Lancamento.Persistence.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Empresa> builder)
         {
-            builder.HasMany(x => x.ContasBancarias).WithOne(x => x.Empresa);
+            builder.HasKey(x => x.Id);
+            builder.OwnsOne(x => x.Cnpj, c => { c.Property(y => y.Value).HasColumnName("Cnpj_Value"); });
         }
     }
 }

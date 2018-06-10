@@ -14,11 +14,17 @@ namespace Stone.Lancamento.Persistence.Repositories
         {
         }
 
+        public override IQueryable<ContaBancaria> GetAll()
+        {
+            return base.GetAll()
+                .Include(x => x.Empresa);
+        }
+
         public ContaBancaria GetByCnpj(Cnpj cnpj)
         {
             return this.GetAll()
                 .Include(x => x.Empresa)                
-                .FirstOrDefault(x => x.Cnpj.Equals(cnpj));
+                .FirstOrDefault(x => x.Empresa.Cnpj.Equals(cnpj));
         }
 
         public ContaBancaria GetByNumero(string numero)
