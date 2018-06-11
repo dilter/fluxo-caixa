@@ -13,9 +13,10 @@ using System;
 namespace Stone.Lancamento.Persistence.Migrations
 {
     [DbContext(typeof(LancamentosDbContext))]
-    partial class LancamentosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180611212825_AddDescricaoRemoveEncargosLancamento")]
+    partial class AddDescricaoRemoveEncargosLancamento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
