@@ -13,9 +13,10 @@ using System;
 namespace Stone.Lancamento.Persistence.Migrations
 {
     [DbContext(typeof(LancamentosDbContext))]
-    partial class LancamentosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180610205816_LancamentoReference")]
+    partial class LancamentoReference
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,8 +39,6 @@ namespace Stone.Lancamento.Persistence.Migrations
                     b.Property<decimal>("Limite");
 
                     b.Property<string>("Numero");
-
-                    b.Property<decimal>("TaxaUtilizacaoLimite");
 
                     b.Property<int>("Tipo");
 
@@ -223,7 +222,7 @@ namespace Stone.Lancamento.Persistence.Migrations
 
             modelBuilder.Entity("Stone.Lancamento.Domain.Lancamentos.Entities.Pagamento", b =>
                 {
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao", "Consolidacao")
+                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao")
                         .WithMany("Pagamentos")
                         .HasForeignKey("ConsolidacaoId");
 
@@ -238,7 +237,7 @@ namespace Stone.Lancamento.Persistence.Migrations
 
             modelBuilder.Entity("Stone.Lancamento.Domain.Lancamentos.Entities.Recebimento", b =>
                 {
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao", "Consolidacao")
+                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao")
                         .WithMany("Recebimentos")
                         .HasForeignKey("ConsolidacaoId");
 

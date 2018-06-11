@@ -17,6 +17,7 @@ namespace Stone.Lancamento.Persistence.Configuration
             modelBuilder.ApplyConfiguration(new RecebimentoModelConfiguration());
             modelBuilder.ApplyConfiguration(new ContaBancariaModelConfiguration());
             modelBuilder.ApplyConfiguration(new EmpresaModelConfiguration());
+            modelBuilder.ApplyConfiguration(new ConsolidacaoModelConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

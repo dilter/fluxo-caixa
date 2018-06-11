@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Contas.Repositories;
+using Stone.Lancamento.Domain.Lancamentos.Entities;
 using Stone.Sdk.Domain;
 using Stone.Sdk.Persistence;
 
@@ -32,6 +34,13 @@ namespace Stone.Lancamento.Persistence.Repositories
             return this.GetAll()
                 .Include(x => x.Empresa)                
                 .FirstOrDefault(x => x.Numero == numero);
+        }
+
+        public decimal GetSaldoById(Guid contaId)
+        {            
+            var sumRecebimentos = _unitOfWork.FindAll<Recebimento>().Sum(x => x.Valor);
+            var sumPagamentos = _unitOfWork.FindAll<Pagamento>().Sum(x => x.Valor);
+            return sumRecebimentos - sumPagamentos;
         }
     }
 }

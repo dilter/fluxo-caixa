@@ -9,6 +9,7 @@ namespace Stone.Lancamento.Persistence.ModelConfiguration
         public void Configure(EntityTypeBuilder<Recebimento> builder)
         {
             builder.HasOne(x => x.ContaBancaria);
+            builder.HasOne(x => x.Lancamento);
         }
     }
 }

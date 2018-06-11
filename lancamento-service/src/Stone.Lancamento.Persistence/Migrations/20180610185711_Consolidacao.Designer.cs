@@ -13,9 +13,10 @@ using System;
 namespace Stone.Lancamento.Persistence.Migrations
 {
     [DbContext(typeof(LancamentosDbContext))]
-    partial class LancamentosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180610185711_Consolidacao")]
+    partial class Consolidacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,8 +39,6 @@ namespace Stone.Lancamento.Persistence.Migrations
                     b.Property<decimal>("Limite");
 
                     b.Property<string>("Numero");
-
-                    b.Property<decimal>("TaxaUtilizacaoLimite");
 
                     b.Property<int>("Tipo");
 
@@ -131,8 +130,6 @@ namespace Stone.Lancamento.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid?>("LancamentoId");
-
                     b.Property<decimal>("Valor");
 
                     b.HasKey("Id");
@@ -140,8 +137,6 @@ namespace Stone.Lancamento.Persistence.Migrations
                     b.HasIndex("ConsolidacaoId");
 
                     b.HasIndex("ContaBancariaId");
-
-                    b.HasIndex("LancamentoId");
 
                     b.ToTable("Pagamento");
                 });
@@ -163,8 +158,6 @@ namespace Stone.Lancamento.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid?>("LancamentoId");
-
                     b.Property<decimal>("Valor");
 
                     b.HasKey("Id");
@@ -172,8 +165,6 @@ namespace Stone.Lancamento.Persistence.Migrations
                     b.HasIndex("ConsolidacaoId");
 
                     b.HasIndex("ContaBancariaId");
-
-                    b.HasIndex("LancamentoId");
 
                     b.ToTable("Recebimento");
                 });
@@ -223,32 +214,24 @@ namespace Stone.Lancamento.Persistence.Migrations
 
             modelBuilder.Entity("Stone.Lancamento.Domain.Lancamentos.Entities.Pagamento", b =>
                 {
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao", "Consolidacao")
+                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao")
                         .WithMany("Pagamentos")
                         .HasForeignKey("ConsolidacaoId");
 
                     b.HasOne("Stone.Lancamento.Domain.Contas.Entities.ContaBancaria", "ContaBancaria")
                         .WithMany()
                         .HasForeignKey("ContaBancariaId");
-
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Lancamento", "Lancamento")
-                        .WithMany()
-                        .HasForeignKey("LancamentoId");
                 });
 
             modelBuilder.Entity("Stone.Lancamento.Domain.Lancamentos.Entities.Recebimento", b =>
                 {
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao", "Consolidacao")
+                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Consolidacao")
                         .WithMany("Recebimentos")
                         .HasForeignKey("ConsolidacaoId");
 
                     b.HasOne("Stone.Lancamento.Domain.Contas.Entities.ContaBancaria", "ContaBancaria")
                         .WithMany()
                         .HasForeignKey("ContaBancariaId");
-
-                    b.HasOne("Stone.Lancamento.Domain.Lancamentos.Entities.Lancamento", "Lancamento")
-                        .WithMany()
-                        .HasForeignKey("LancamentoId");
                 });
 #pragma warning restore 612, 618
         }

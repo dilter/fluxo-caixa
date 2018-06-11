@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
+using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Sdk.Domain.Specification;
 using Stone.Sdk.Persistence;
 
 namespace Stone.Lancamento.Persistence.Repositories
@@ -31,22 +33,31 @@ namespace Stone.Lancamento.Persistence.Repositories
             return entity;
         }
 
-        public IQueryable<Lancamento> GetByData(DateTime data)
+        public IQueryable<Lancamento> GetAllRecebidosByData(DateTime data)
         {
             return this.GetAll()
+                .Where(x => x.Situacao == SituacaoLancamento.Recebido)
                 .Where(x => x.Em.Date == data.Date);
         }
 
-        public IQueryable<Pagamento> GetAllPagamentos()
+        public IQueryable<Pagamento> FindAllPagamentos(ISpecification<Pagamento> specification = null)
         {
-            return _unitOfWork.FindAll<Pagamento>()
-                .Include(x => x.ContaBancaria);
+            var all = _unitOfWork.FindAll<Pagamento>();
+            if (specification != null)
+            {
+                all = all.Where(specification.IsSatisfiedBy());
+            }            
+            return all.Include(x => x.ContaBancaria);
         }
 
-        public IQueryable<Recebimento> GetAllRecebimentos()
+        public IQueryable<Recebimento> FindAllRecebimentos(ISpecification<Recebimento> specification = null)
         {
-            return _unitOfWork.FindAll<Recebimento>()
-                .Include(x => x.ContaBancaria);
+            var all = _unitOfWork.FindAll<Recebimento>();
+            if (specification != null)
+            {
+                all = all.Where(specification.IsSatisfiedBy());
+            }            
+            return all.Include(x => x.ContaBancaria);
         }
     }
 }

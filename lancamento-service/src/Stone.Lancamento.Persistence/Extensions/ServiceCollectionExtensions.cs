@@ -25,6 +25,7 @@ namespace Stone.Lancamento.Persistence.Extensions
             services.AddScoped<ILancamentos, LancamentosRepository>();
             services.AddScoped<IEmpresas, EmpresasRepository>();
             services.AddScoped<IContas, ContasRepository>();
+            services.AddScoped<IConsolidacoes, ConsolidacoesRepository>();
             
             return services;
         }
