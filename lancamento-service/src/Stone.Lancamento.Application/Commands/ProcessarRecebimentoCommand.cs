@@ -1,14 +1,14 @@
-﻿using Stone.Sdk.Messaging;
+﻿using System;
+using Stone.Sdk.Messaging;
 
 namespace Stone.Lancamento.Application.Commands
 {
-    using Domain.Lancamentos.Entities;
     public class ProcessarRecebimentoCommand : ICommand
     {
-        public Lancamento Input { get; set; }
-        public ProcessarRecebimentoCommand(Lancamento input)
+        public Guid LancamentoId { get; set; }        
+        public ProcessarRecebimentoCommand(Guid lancamentoId)
         {
-            this.Input = input;
+            this.LancamentoId = lancamentoId;            
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
-using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
+using Stone.Lancamento.Domain.Lancamentos.Services;
+using Stone.Sdk.Extensions;
 using Stone.Sdk.Messaging;
+using Stone.Sdk.Persistence;
 
 namespace Stone.Lancamento.Application.Commands.Handlers
 {
@@ -12,37 +13,29 @@ namespace Stone.Lancamento.Application.Commands.Handlers
     
     public class ConsolidarLancamentosCommandHandler : IAsyncCommandHandler<ConsolidarLancamentosCommand>
     {
-        private readonly ICommandBus _commandBus;
-        private readonly ILancamentos _lancamentos;        
-        public ConsolidarLancamentosCommandHandler(ILancamentos lancamentos, ICommandBus commandBus)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IConsolidacoes _consolidacoes;
+        private readonly IContas _contas;
+        private readonly ConsolidarLancamentos _consolidarLancamentos;
+        public ConsolidarLancamentosCommandHandler(IConsolidacoes consolidacoes, ConsolidarLancamentos consolidarLancamentos, IContas contas, IUnitOfWork unitOfWork)
         {
-            _lancamentos = lancamentos;
-            _commandBus = commandBus;
+            _consolidacoes = consolidacoes;
+            _consolidarLancamentos = consolidarLancamentos;
+            _contas = contas;
+            _unitOfWork = unitOfWork;
         }
 
-        private async Task EnviarParaProcessamento(Lancamento lancamento)
-        {
-            switch (lancamento.Tipo)
-            {
-                case TipoLancamento.Pagamento:
-                    await _commandBus.SendAsync(new ProcessarPagamentoCommand(lancamento));
-                    break;
-                case TipoLancamento.Recebimento:
-                    await _commandBus.SendAsync(new ProcessarRecebimentoCommand(lancamento));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        
         public async Task Handle(CommandContext<ConsolidarLancamentosCommand> context)
-        {
-            var data = DateTime.Parse(context.Command.Input.Data, new CultureInfo("pt-BR"));
-            var lancamentosPorData = _lancamentos.GetByData(data).ToList();
-            foreach (var lancamento in lancamentosPorData)
+        {            
+            var data = context.Command.Input.Data.ToLocalDateTime();
+            var contaBancariaId = context.Command.Input.ContaBancariaId;
+            var consolidacao = _consolidacoes.FindAll(new Consolidacao.ByData(data));
+            if (!consolidacao.Any())
             {
-               await this.EnviarParaProcessamento(lancamento);
-            }            
+                var contaBancaria = _contas.FindById(contaBancariaId);                 
+                await _consolidarLancamentos.Apply(contaBancaria, data);
+                _unitOfWork.Commit();
+            }       
         }
     }
 }

@@ -3,10 +3,10 @@ using Stone.Sdk.Messaging;
 
 namespace Stone.Lancamento.Application.Commands
 {
-    public class CriarLancamentoCommand : ICommand
+    public class ReceberLancamentoCommand : ICommand
     {
         public LancamentoInput Input { get; set; }
-        public CriarLancamentoCommand(LancamentoInput input)
+        public ReceberLancamentoCommand(LancamentoInput input)
         {
             this.Input = input;
         }      
