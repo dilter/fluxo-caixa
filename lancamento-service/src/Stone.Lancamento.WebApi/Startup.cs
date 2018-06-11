@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Stone.Lancamento.Application;
 using Stone.Lancamento.Application.Commands;
 using Stone.Lancamento.Application.Events;
+using Stone.Lancamento.Domain.Contas.Services;
+using Stone.Lancamento.Domain.Lancamentos.Entities;
 using Stone.Lancamento.Domain.Lancamentos.Services;
 using Stone.Lancamento.Persistence.Configuration;
 using Stone.Lancamento.Persistence.Extensions;
@@ -38,27 +41,26 @@ namespace Stone.Lancamento.WebApi
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LancamentoValidator>())                
                 .AddJsonOptions(options =>
                 {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver
                     {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
+                        NamingStrategy = new SnakeCaseNamingStrategy(),                        
+                    };                    
                 });
 
             services
                 .AddPersistenceEfContext<LancamentosDbContext>(Configuration)
                 .AddScoped<ProcessarPagamento>()
-                .AddScoped<ProcessarRecebimento>()
+                .AddScoped<ProcessarRecebimento>()                
+                .AddScoped<ConsolidarLancamentos>()                
+                .AddScoped<CalcularSaldo>()
+                .AddScoped<CalcularEncargos>()            
                 .AddRepositories();
             
-            services
-                .AddMediatR(typeof(CriarLancamentoCommand).Assembly);
-
-            services
-                .AddMessageBroker(Configuration);
-
-            services
-                .AddApplicationMappings();
-            
+            services.AddMediatR(typeof(ReceberLancamentoCommand).Assembly);
+            services.AddMessageBroker(Configuration);
+            services.AddElastisearch(Configuration, new []{ typeof(Pagamento) });            
+            services.AddApplicationMappings();            
             services
                 .AddSwaggerGen(c =>
                 {
@@ -77,7 +79,7 @@ namespace Stone.Lancamento.WebApi
 
             app.UseSubcriberFor<LancamentoProcessadoEvent>();
             
-            app.UseCommandHandlerFor<CriarLancamentoCommand>();
+            app.UseCommandHandlerFor<ReceberLancamentoCommand>();
             
             app.UseSwagger();
             app.UseSwaggerUI(c =>

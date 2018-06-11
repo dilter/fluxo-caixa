@@ -10,7 +10,7 @@ namespace Stone.Lancamento.WebApi.Api
         [HttpPost("lancamentos")]
         public async Task<IActionResult> PostLancamento([FromBody] LancamentoInput input)
         {
-            var criarLancamentoCommand = new CriarLancamentoCommand(input);
+            var criarLancamentoCommand = new ReceberLancamentoCommand(input);
             if (!ModelState.IsValid)
             {                
                 return StatusCode(400, new

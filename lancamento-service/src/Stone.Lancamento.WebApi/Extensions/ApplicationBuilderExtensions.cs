@@ -19,10 +19,14 @@ namespace Stone.Lancamento.WebApi
             var empresa = empresasRepository.Add(new Empresa()
             {
                 Cnpj = "15.381.215/0001-77",                
-                RazaoSocial = "DILTER PORTO LADISLAU - ME",
+                RazaoSocial = "DILTER PORTO LADISLAU - ME",                
             });
-            
-            var contaBancaria = new ContaBancaria(empresa, Banco.Santander, "13000715-7", TipoConta.ContaCorrente, 20000);
+
+            var contaBancaria = new ContaBancaria(empresa,
+                Banco.Santander,
+                "13000715-7",
+                TipoConta.ContaCorrente,
+                20000) {TaxaUtilizacaoLimite = (decimal) 0.83};
             contasRepository.Add(contaBancaria);
             
             uow.Commit();

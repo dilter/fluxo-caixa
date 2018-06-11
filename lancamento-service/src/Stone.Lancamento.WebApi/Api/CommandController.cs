@@ -8,7 +8,7 @@ namespace Stone.Lancamento.WebApi.Api
     public partial class CommandController : Controller
     {
         private readonly ILogger<CommandController> _logger;
-        private ICommandBus _commandBus;
+        private readonly ICommandBus _commandBus;
         public CommandController(ILogger<CommandController> logger, ICommandBus commandBus)
         {
             _logger = logger;
