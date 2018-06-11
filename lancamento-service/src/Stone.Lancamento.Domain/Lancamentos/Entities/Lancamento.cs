@@ -15,8 +15,7 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
         public string Descricao { get; set; }
         public string ContaDestino { get; set; }
         public TipoConta TipoConta { get; set; }
-        public Cnpj Cnpj { get; set; }
-        public decimal Encargos { get; set; }
+        public Cnpj Cnpj { get; set; }        
         public DateTime Em { get; set; }
         public TipoLancamento Tipo { get; set; }
         public SituacaoLancamento Situacao { get; set; }

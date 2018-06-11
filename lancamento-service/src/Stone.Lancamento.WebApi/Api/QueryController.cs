@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Contas.Services;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;

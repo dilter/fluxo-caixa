@@ -9,6 +9,7 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
 {
     public class Pagamento : Entity
     {
+        public string Descricao { get; set; }
         public Lancamento Lancamento { get; set; }
         public decimal Valor { get; set; }
         public ContaBancaria ContaBancaria { get; set; }
