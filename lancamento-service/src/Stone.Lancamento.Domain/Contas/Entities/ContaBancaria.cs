@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Stone.Lancamento.Domain.Lancamentos.Entities;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
 using Stone.Sdk.Domain;
+using Stone.Sdk.Domain.Specification;
 using Stone.Sdk.Persistence;
 
 namespace Stone.Lancamento.Domain.Contas.Entities
@@ -13,6 +15,7 @@ namespace Stone.Lancamento.Domain.Contas.Entities
         public string Numero { get; set; }
         public TipoConta Tipo { get; set; }        
         public decimal Limite { get; protected set; }
+        public decimal TaxaUtilizacaoLimite { get; set; }
 
         public ContaBancaria()
         {
@@ -28,23 +31,17 @@ namespace Stone.Lancamento.Domain.Contas.Entities
             this.Limite = limite;
         }
 
-        private bool HasLimiteDisponivel(decimal valor)
+        public class ByNumero : Specification<ContaBancaria>
         {
-            return this.Limite >= valor;
-        }
-
-        public void EfetuarRecebimento(Recebimento recebimento)
-        {
-            this.Limite += recebimento.Valor;
-        }
-        
-        public void EfetuarPagamento(Pagamento pagamento)
-        {
-            if (!this.HasLimiteDisponivel(pagamento.Valor))
+            public string Numero { get; set; }
+            public ByNumero(string numero)
             {
-                throw new Exception("Limite indisponível");                    
+                this.Numero = numero;
             }
-            this.Limite -= pagamento.Valor;
+            public override Expression<Func<ContaBancaria, bool>> IsSatisfiedBy()
+            {
+                return c => c.Numero == this.Numero;
+            }
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
 using Stone.Sdk.Domain;
+using Stone.Sdk.Domain.Specification;
 using Stone.Sdk.Persistence;
 
 namespace Stone.Lancamento.Domain.Lancamentos.Entities
@@ -23,6 +26,27 @@ namespace Stone.Lancamento.Domain.Lancamentos.Entities
         {
             this.Situacao = SituacaoLancamento.Recebido;
             this.CreationTime = DateTime.Now;
+        }
+        
+        public class ByData : Specification<Lancamento>
+        {
+            public DateTime Data { get; }
+            public ByData(DateTime data)
+            {
+                this.Data = data;
+            }
+            public override Expression<Func<Lancamento, bool>> IsSatisfiedBy()
+            {
+                return c => c.Em.Date == this.Data.Date;
+            }
+        }
+        
+        public class Recebidos : Specification<Lancamento>
+        {
+            public override Expression<Func<Lancamento, bool>> IsSatisfiedBy()
+            {
+                return c => c.Situacao == SituacaoLancamento.Recebido;
+            }
         }
     }
 }

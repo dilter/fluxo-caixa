@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Stone.Sdk.Domain;
+using Stone.Sdk.Domain.Specification;
 
 namespace Stone.Lancamento.Domain.Lancamentos.Repositories
 {
@@ -12,8 +12,8 @@ namespace Stone.Lancamento.Domain.Lancamentos.Repositories
         Pagamento AddPagamento(Pagamento pagamento);
         Recebimento AddRecebimento(Recebimento recebimento);
 
-        IQueryable<Lancamento> GetByData(DateTime data);
-        IQueryable<Pagamento> GetAllPagamentos();
-        IQueryable<Recebimento> GetAllRecebimentos();
+        IQueryable<Lancamento> GetAllRecebidosByData(DateTime data);
+        IQueryable<Pagamento> FindAllPagamentos(ISpecification<Pagamento> specification = null);
+        IQueryable<Recebimento> FindAllRecebimentos(ISpecification<Recebimento> specification = null);
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Contas.Repositories;
+using Stone.Lancamento.Domain.Contas.Services;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
 using Stone.Sdk.Domain;
 
@@ -12,37 +15,42 @@ namespace Stone.Lancamento.Domain.Lancamentos.Services
     {        
         private readonly IContas _contas;
         private readonly ILancamentos _lancamentos;
-        public ProcessarPagamento(IContas contas, ILancamentos lancamentos)
+        private readonly CalcularSaldo _calcularSaldo;
+        
+        public ProcessarPagamento(IContas contas, ILancamentos lancamentos, CalcularSaldo calcularSaldo)
         {
             _contas = contas;
             _lancamentos = lancamentos;
+            _calcularSaldo = calcularSaldo;
         }
 
-        public async Task Apply(Lancamento lancamento)
+        public async Task<Pagamento> Apply(Lancamento lancamento)
         {
             try
-            {
-                var contaBancaria = _contas.GetByNumero(lancamento.ContaDestino);
+            {                                
+                var contaBancaria = _contas.FindAll(new ContaBancaria.ByNumero(lancamento.ContaDestino)).FirstOrDefault();
+                var saldo = _calcularSaldo.Apply(contaBancaria);                
+                
                 if (contaBancaria == null)
                 {
                     throw new Exception("Conta Bancária inválida");
                 }
-//                if (!contaBancaria.Empresa.Cnpj.Equals(lancamento.Cnpj))
-//                {
-//                    throw new Exception("Cnpj inválido");
-//                }
+                
                 if (!contaBancaria.Tipo.Equals(lancamento.TipoConta))
                 {
                     throw new Exception("Tipo de conta inválido");
                 }   
-                var pagamento = new Pagamento
+                
+                var pagamento = new Pagamento(lancamento, contaBancaria);
+                
+                if (!saldo.Has(pagamento.Valor))
                 {
-                    ContaBancaria = contaBancaria,
-                    Em = lancamento.Em,
-                    Valor = lancamento.Valor,                    
-                };
-                contaBancaria.EfetuarPagamento(pagamento);
-                _lancamentos.AddPagamento(pagamento);
+                    throw new Exception("Não há limite disponível");
+                }                
+                
+                _lancamentos.AddPagamento(pagamento);                
+                
+                return pagamento;
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
-﻿using Stone.Lancamento.Domain.Contas.Entities;
+﻿using System;
+using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Sdk.Domain;
 
 namespace Stone.Lancamento.Domain.Contas.Repositories
@@ -7,5 +8,6 @@ namespace Stone.Lancamento.Domain.Contas.Repositories
     {
         ContaBancaria GetByCnpj(Cnpj cnpj);
         ContaBancaria GetByNumero(string numero);
+        decimal GetSaldoById(Guid contaId);
     }
 }
