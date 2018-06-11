@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Stone.Lancamento.Application;
 using Stone.Lancamento.Application.Commands;
+using Stone.Lancamento.Domain.Contas.Services;
+using Stone.Lancamento.Domain.Lancamentos.Entities;
 using Stone.Lancamento.Domain.Lancamentos.Services;
 using Stone.Lancamento.Persistence.Configuration;
 using Stone.Lancamento.Persistence.Extensions;
@@ -27,17 +29,16 @@ namespace Stone.Lancamento.Consolidador
             services
                 .AddPersistenceEfContext<LancamentosDbContext>(Configuration)
                 .AddScoped<ProcessarPagamento>()
-                .AddScoped<ProcessarRecebimento>()
+                .AddScoped<ProcessarRecebimento>()                
+                .AddScoped<ConsolidarLancamentos>()                
+                .AddScoped<CalcularSaldo>()
+                .AddScoped<CalcularEncargos>()       
                 .AddRepositories();
             
-            services
-                .AddMediatR(typeof(CriarLancamentoCommand).Assembly);
-
-            services
-                .AddMessageBroker(Configuration);
-
-            services
-                .AddApplicationMappings();
+            services.AddMediatR(typeof(ReceberLancamentoCommand).Assembly);
+            services.AddMessageBroker(Configuration);
+            services.AddElastisearch(Configuration, new []{ typeof(Pagamento) });
+            services.AddApplicationMappings();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
