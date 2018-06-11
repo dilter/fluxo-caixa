@@ -17,9 +17,10 @@ namespace Stone.Lancamento.Domain.Contas.Services
         {
             var saldoContaBancaria = _calcularSaldo.Apply(contaBancaria);
             if (!saldoContaBancaria.IsNegativo()) return null;
-            var valorEncargos = saldoContaBancaria.Valor * contaBancaria.TaxaUtilizacaoLimite;
+            var valorEncargos = saldoContaBancaria.Valor * (contaBancaria.TaxaUtilizacaoLimite/100);
             return new Pagamento()
             {
+                Descricao = "Cobrança de Taxas e Encargos",
                 Encargos = valorEncargos,
                 ContaBancaria = contaBancaria,
             };
