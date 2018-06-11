@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Stone.Sdk.Domain;
+using Stone.Sdk.Domain.Specification;
 
 namespace Stone.Sdk.Persistence
 {
@@ -16,6 +17,16 @@ namespace Stone.Sdk.Persistence
         public virtual IQueryable<TEntity> GetAll()
         {
             return _unitOfWork.FindAll<TEntity>();
+        }
+
+        public IQueryable<TEntity> FindAll(ISpecification<TEntity> specification = null)
+        {
+            var all = this.GetAll();
+            if (specification != null)
+            {
+                all = all.Where(specification.IsSatisfiedBy());
+            }            
+            return all;
         }
 
         public virtual TEntity Add(TEntity entity)
