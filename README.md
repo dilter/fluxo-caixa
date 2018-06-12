@@ -3,7 +3,7 @@
 A solução consiste em:
 
 * web api - API Rest com as rotas para execução do fluxo de lançamentos, consolidações e consultas. Responsável pelo handler do comando `ReceberLancamentosCommand`
-* worker - App Console responsável pelos handlers dos comandos `ProcessarPagamentoCommand`, `ProcessarRecebimentoCommand` e `ConsolidarLancamentos`
+* worker - App Console responsável pelos handlers dos comandos `ProcessarPagamentoCommand`, `ProcessarRecebimentoCommand` e `ConsolidarLancamentosCommand`
 * mensageria com RabbitMQ - infraestrutura de message broker
 * database com SQL Server - persistência dos dados
 
