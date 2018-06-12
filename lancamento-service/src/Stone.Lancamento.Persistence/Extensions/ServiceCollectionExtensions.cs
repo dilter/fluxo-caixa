@@ -15,7 +15,7 @@ namespace Stone.Lancamento.Persistence.Extensions
         {            
             var configurationConnectionStringSection = configuration.GetSection("ConnectionStrings");
             services.AddScoped<DbContext, TDbContext>();
-            services.AddDbContext<TDbContext>(opt => opt.UseSqlServer(configurationConnectionStringSection["DefaultConnection"]));
+            services.AddDbContext<TDbContext>(opt => opt.UseSqlServer(configurationConnectionStringSection["DefaultConnection"]));            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }

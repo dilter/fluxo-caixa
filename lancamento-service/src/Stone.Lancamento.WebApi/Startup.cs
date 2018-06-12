@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -24,9 +25,14 @@ namespace Stone.Lancamento.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -90,7 +96,12 @@ namespace Stone.Lancamento.WebApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseMvc();
+
+            var context = app.ApplicationServices.GetService<DbContext>();
+                        
+            context.Database.Migrate();;
             
+
             // Sample data!
             //app.SeedInMemoryData();
         }

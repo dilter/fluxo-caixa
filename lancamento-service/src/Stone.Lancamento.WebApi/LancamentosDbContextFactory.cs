@@ -19,5 +19,5 @@ namespace Stone.Lancamento.WebApi
             builder.UseSqlServer(connectionString); 
             return new LancamentosDbContext(builder.Options);            
         }
-    }
+    }    
 }

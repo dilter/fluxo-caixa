@@ -1,0 +1,50 @@
+version: "3"
+services:
+    rabbitmq:
+        image: "rabbitmq:3-management"
+        hostname: "rabbitmq"
+        environment:
+          RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+          RABBITMQ_DEFAULT_USER: "admin"
+          RABBITMQ_DEFAULT_PASS: "RiaDAMKG1SyU"
+          RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+          - "15672:15672"
+          - "5672:5672"
+        labels:
+          NAME: "rabbitmq"
+    api:
+        build: ./lancamento-service
+        ports:
+            - "5001:5001"
+        restart: on-failure
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Production
+        depends_on:
+            - rabbitmq
+            - db
+        links:
+            - rabbitmq
+            - db
+    worker:
+        build: 
+          context: ./lancamento-service
+          dockerfile: DockerfileWorker
+        ports:
+            - "5000:5000"
+        restart: on-failure
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Production
+        depends_on:
+            - rabbitmq
+            - db
+        links:
+            - rabbitmq
+            - db
+    db:
+        image: "microsoft/mssql-server-linux"
+        ports:
+          - "1433:1433"
+        environment:
+            SA_PASSWORD: "Devmaster1024"
+            ACCEPT_EULA: "Y"

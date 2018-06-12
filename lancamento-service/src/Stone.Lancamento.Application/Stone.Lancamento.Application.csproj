@@ -6,7 +6,7 @@
     <PackageReference Include="MediatR" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />
+    <ProjectReference Include="..\Stone.Sdk\Stone.Sdk.csproj" />
     <ProjectReference Include="..\Stone.Lancamento.Domain\Stone.Lancamento.Domain.csproj" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,6 @@
     <Folder Include="Lancamentos\Events" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\sdk\Stone.Sdk\Stone.Sdk.csproj" />
+    <ProjectReference Include="..\Stone.Sdk\Stone.Sdk.csproj" />
   </ItemGroup>
 </Project>

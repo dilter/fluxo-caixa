@@ -13,8 +13,8 @@ using System;
 namespace Stone.Lancamento.Persistence.Migrations
 {
     [DbContext(typeof(LancamentosDbContext))]
-    [Migration("20180611222027_SituacaoConsolidacao")]
-    partial class SituacaoConsolidacao
+    [Migration("20180612174037_Seed")]
+    partial class Seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
