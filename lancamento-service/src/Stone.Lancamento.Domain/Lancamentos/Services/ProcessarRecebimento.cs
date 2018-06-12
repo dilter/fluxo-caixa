@@ -21,7 +21,7 @@ namespace Stone.Lancamento.Domain.Lancamentos.Services
             _lancamentos = lancamentos;
         }
 
-        public async Task<Recebimento> Apply(Lancamento lancamento)
+        public async Task<Recebimento> Apply(Consolidacao consolidacao, Lancamento lancamento)
         {
             var contaBancaria = _contas.FindAll(new ContaBancaria.ByNumero(lancamento.ContaDestino)).FirstOrDefault();                            
             if (contaBancaria == null)
@@ -41,6 +41,8 @@ namespace Stone.Lancamento.Domain.Lancamentos.Services
                 Valor = lancamento.Valor,                    
             };                            
                 
+            consolidacao.Recebimentos.Add(recebimento);
+            
             _lancamentos.AddRecebimento(recebimento);                
                 
             return recebimento;

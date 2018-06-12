@@ -77,6 +77,8 @@ namespace Stone.Lancamento.Persistence.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<int>("Situacao");
+
                     b.HasKey("Id");
 
                     b.ToTable("Consolidacao");

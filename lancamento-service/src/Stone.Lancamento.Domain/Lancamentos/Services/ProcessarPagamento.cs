@@ -24,10 +24,10 @@ namespace Stone.Lancamento.Domain.Lancamentos.Services
             _calcularSaldo = calcularSaldo;
         }
 
-        public async Task<Pagamento> Apply(Lancamento lancamento)
+        public async Task<Pagamento> Apply(Consolidacao consolidacao, Lancamento lancamento)
         {
             try
-            {                                
+            {                  
                 var contaBancaria = _contas.FindAll(new ContaBancaria.ByNumero(lancamento.ContaDestino)).FirstOrDefault();
                 var saldo = _calcularSaldo.Apply(contaBancaria);                
                 
@@ -49,6 +49,8 @@ namespace Stone.Lancamento.Domain.Lancamentos.Services
                 }                
                 
                 _lancamentos.AddPagamento(pagamento);                
+                
+                consolidacao.Pagamentos.Add(pagamento);
                 
                 return pagamento;
             }

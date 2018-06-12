@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Stone.Lancamento.Domain.Contas.Entities;
 using Stone.Lancamento.Domain.Lancamentos.Entities;
 using Stone.Sdk.Domain;
@@ -17,7 +18,7 @@ namespace Stone.Lancamento.Domain.Contas.Services
         {
             var saldoContaBancaria = _calcularSaldo.Apply(contaBancaria);
             if (!saldoContaBancaria.IsNegativo()) return null;
-            var valorEncargos = saldoContaBancaria.Valor * (contaBancaria.TaxaUtilizacaoLimite/100);
+            var valorEncargos = Math.Abs(saldoContaBancaria.Valor * (contaBancaria.TaxaUtilizacaoLimite/100));
             return new Pagamento()
             {
                 Descricao = "Cobrança de Taxas e Encargos",

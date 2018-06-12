@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Stone.Lancamento.Domain.Contas.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Repositories;
 using Stone.Lancamento.Domain.Lancamentos.Services;
+using Stone.Lancamento.Domain.Lancamentos.ValueObjects;
 using Stone.Sdk.Extensions;
 using Stone.Sdk.Messaging;
 using Stone.Sdk.Persistence;
@@ -29,11 +30,12 @@ namespace Stone.Lancamento.Application.Commands.Handlers
         {            
             var data = context.Command.Input.Data.ToLocalDateTime();
             var contaBancariaId = context.Command.Input.ContaBancariaId;
-            var consolidacao = _consolidacoes.FindAll(new Consolidacao.ByData(data));
-            if (!consolidacao.Any())
+            var consolidacao = _consolidacoes
+                .FindAll(new Consolidacao.ByData(data).And(new Consolidacao.NaoProcessada())).FirstOrDefault();
+            if (consolidacao != null)
             {
                 var contaBancaria = _contas.FindById(contaBancariaId);                 
-                await _consolidarLancamentos.Apply(contaBancaria, data);
+                await _consolidarLancamentos.Apply(consolidacao, contaBancaria);
                 _unitOfWork.Commit();
             }       
         }

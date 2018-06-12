@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Stone.Lancamento.Application.Events;
 using Stone.Lancamento.Domain.Lancamentos.Entities;
@@ -11,33 +12,37 @@ namespace Stone.Lancamento.Application.Commands.Handlers
 {
     public class ProcessarPagamentoCommandHandler : IAsyncCommandHandler<ProcessarPagamentoCommand>
     {
-        private readonly IEventBus _eventBus;
-        private readonly IIndexer _indexer;
+        private readonly IEventBus _eventBus;        
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILancamentos _lancamentos;
-        private readonly ProcessarPagamento _processarPagamento;
-        public ProcessarPagamentoCommandHandler(ProcessarPagamento processarPagamento, IEventBus eventBus, IIndexer indexer, IUnitOfWork unitOfWork, ILancamentos lancamentos)
+        private readonly IConsolidacoes _consolidacoes;
+        private readonly ProcessarPagamento _processarPagamento;        
+        public ProcessarPagamentoCommandHandler(ProcessarPagamento processarPagamento, IEventBus eventBus, IUnitOfWork unitOfWork, ILancamentos lancamentos, IConsolidacoes consolidacoes)
         {
             _processarPagamento = processarPagamento;
-            _eventBus = eventBus;
-            _indexer = indexer;
+            _eventBus = eventBus;            
             _unitOfWork = unitOfWork;
             _lancamentos = lancamentos;
+            _consolidacoes = consolidacoes;
         }
 
         public async Task Handle(CommandContext<ProcessarPagamentoCommand> context)
         {
             var lancamento = _lancamentos.FindById(context.Command.LancamentoId);            
             try
-            {                
-                var pagamento = await _processarPagamento.Apply(lancamento);                
-                await _eventBus.PublishAsync(new LancamentoProcessadoEvent(lancamento.Id), context);
-                // await _indexer.IndexAsync(pagamento);               
+            {
+                var consolidacao = _consolidacoes.FindAll(new Consolidacao.ByData(lancamento.Em)).FirstOrDefault();
+                if (consolidacao == null)
+                {
+                    consolidacao = _consolidacoes.Add(new Consolidacao(lancamento.Em));
+                }                
+                await _processarPagamento.Apply(consolidacao, lancamento);                
+                await _eventBus.PublishAsync(new LancamentoProcessadoEvent(lancamento.Id), context);                               
             }
             catch (Exception e)
             {
                 await _eventBus.PublishAsync(new LancamentoProcessadoEvent(lancamento.Id, e), context);
-            }
+            }            
             _unitOfWork.Commit();
         }
     }
