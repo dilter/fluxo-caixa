@@ -18,6 +18,7 @@ docker-compose up
 
 A web api deverá estar disponível em `http://localhost:5001/swagger` após a inicialização bem-sucedida com a interface do Swagger UI padrão disponível para explorar a API.
 
+## Screencast
 
-
+[Apresentação da Arquitetura](https://www.youtube.com/watch?v=P3EtTkol3zc)
 
